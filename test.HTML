@@ -1,0 +1,128 @@
+<!-- HTML Code -->
+<canvas id="sternenhimmel"></canvas>
+<div id="countdown-label" class="countdown-label">Nur noch:</div>
+<div id="countdown" class="countdown"></div>
+<div id="message" class="message">Bis wir uns wieder sehen... ＼(≧▽≦)／</div>
+
+<!-- CSS Code -->
+<style>
+  body {
+    background-color: #000; /* Hier kannst du die Hintergrundfarbe ändern */
+  }
+  canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .countdown-label {
+    font-size: 36px;
+    font-weight: bold;
+    color: #fff; /* Hier kannst du die Farbe des Countdown-Textes ändern */
+    text-align: center;
+    position: absolute;
+    top:  35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Arial', sans-serif;
+  }
+  .countdown {
+    font-size: 36px;
+    font-weight: bold;
+    color: #fff; /* Hier kannst du die Farbe des Countdown-Textes ändern */
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Arial', sans-serif;
+  }
+  .message {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff; /* Hier kannst du die Farbe des Countdown-Textes ändern */
+    text-align: center;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Arial', sans-serif;
+  }
+</style>
+
+<!-- JavaScript Code -->
+<script>
+  // Get the canvas element
+  var canvas = document.getElementById("sternenhimmel");
+  var ctx = canvas.getContext("2d");
+
+  // Set the canvas size to match the size of the screen
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  // Set the date we're counting down to
+  var countDownDate = new Date("Feb 18, 2023 16:00:00").getTime();
+
+  // Create an array to hold the star objects
+  var stars = [];
+
+  // Create the star objects
+  for (var i = 0; i < 100; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 2 + 1,
+      speed: Math.random() * 0.2 + 0.1
+    });
+  }
+
+  // Draw the stars on the canvas
+  function drawStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#fff";
+    for (var i = 0; i < stars.length; i++) {
+      ctx.beginPath();
+      ctx.arc(stars[i].x, stars[i].y, stars[i].radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Update the position of the star
+      stars[i].x += stars[i].speed;
+      if (stars[i].x > canvas.width) {
+        stars[i].x = 0;
+      }
+    }
+
+    // Draw the stars again
+    requestAnimationFrame(drawStars);
+  }
+
+  // Update the countdown timer every 1 second
+  var x = setInterval(function() {
+
+  // Get today's date and time
+  var now = new Date().getTime();
+
+  // Find the distance between now and the countdown date
+  var distance = countDownDate - now;
+
+  // Calculate the days, hours, minutes, and seconds
+  var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+  var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+  // Display the result in the element with id "countdown"
+  document.getElementById("countdown").innerHTML = days + " Tage " + hours + " Stunden "
+  + minutes + " Minuten " + seconds + " Sekunden ";
+
+  // If the countdown is finished, write some text
+  if (distance < 0) {
+    clearInterval(x);
+    document.getElementById("countdown").innerHTML = "Die Zeit ist abgelaufen!";
+  }
+}, 1000);
+
+// Start the animation loop
+drawStars();
+</script>
